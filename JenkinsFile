@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+    tools {
+    	maven 'maven'
+	}
+    stages {
+        stage('Git Checkout') {
+            steps {
+                git branch: 'main',
+		credentialsId: 'eddygrant000',
+		url: 'https://github.com/eddygrant000/testrepo.git'
+            }
+        }    
+        stage('Compile') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+        stage('Package') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+        stage('Unit Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+	stage('Deploy To Environment') {
+            steps {
+                sh 'echo Deployment Done'
+            }
+        }
+    }
+}
